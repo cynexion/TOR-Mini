@@ -3,13 +3,17 @@
 #include <Servo.h>
 
 // === PIN SETUP ===
-const int button1Pin = 2;
-const int button2Pin = 3;
-const int continuityPin = 4;
-const int led1Pin = 5;
-const int led2Pin = 6;
-const int buzzerPin = 7;
+const int onstatusLed = 2;
+const int button1Pin = 3;
+const int button2Pin = 4;
+const int continuityPin = 5;
+const int led1Pin = 6;
+const int led2Pin = 7;
+const int buzzerPin = 8;
 const int servoPin = 9;
+const int raspiLed = 10;
+const int raspistatus = 11;
+
 
 // === COMPOSANTS ===
 RTC_DS1307 rtc;
@@ -29,6 +33,11 @@ void setup() {
   pinMode(led1Pin, OUTPUT);
   pinMode(led2Pin, OUTPUT);
   pinMode(buzzerPin, OUTPUT);
+  pinMode(onstatusLed, OUTPUT);
+  digitalWrite(onstatusLed, HIGH);
+  pinMode(raspiLed, OUTPUT);
+  pinMode(raspistatus, INPUT_PULLUP);
+  
 
   myServo.attach(servoPin);
   Wire.begin();
