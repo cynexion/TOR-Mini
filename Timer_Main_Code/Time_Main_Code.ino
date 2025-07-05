@@ -8,12 +8,11 @@ const int button1Pin = 3;
 const int button2Pin = 4;
 const int continuityPin = 5;
 const int led1Pin = 6;
-const int led2Pin = 7;
+const int led2Pin = 10;
 const int buzzerPin = 8;
 const int servoPin = 9;
-const int raspiLed = 10;
+const int raspiLed = 7;
 const int raspistatus = 11;
-
 
 // === COMPOSANTS ===
 RTC_DS1307 rtc;
@@ -37,7 +36,6 @@ void setup() {
   digitalWrite(onstatusLed, HIGH);
   pinMode(raspiLed, OUTPUT);
   pinMode(raspistatus, INPUT_PULLUP);
-  
 
   myServo.attach(servoPin);
   Wire.begin();
@@ -110,8 +108,18 @@ void bip(int count, int duration, int gap) {
   }
 }
 
+void blinkLed(int pin, int count, int duration, int gap) {
+  for (int i = 0; i < count; i++) {
+    digitalWrite(pin, HIGH);
+    delay(duration);
+    digitalWrite(pin, LOW);
+    delay(gap);
+  }
+}
+
 void errorBip(int count) {
   bip(count, 100, 100);
+  blinkLed(led2Pin, count, 100, 100);
 }
 
 void handleButton2() {
@@ -143,14 +151,16 @@ void handleButton2() {
 
     if (!continuity) {
       bip(1, 500, 100);
+      blinkLed(led2Pin, 1, 500, 100);
       if (multipleErrors) delay(1000);
     }
     if (!isClosed) {
       bip(2, 100, 100);
+      blinkLed(led1Pin, 2, 100, 100);
       if (multipleErrors) delay(1000);
     }
     if (!rtcAvailable) {
-      bip(3, 100, 100);
+      errorBip(3);
     }
   }
 }
